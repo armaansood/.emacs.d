@@ -1,16 +1,17 @@
 
 ;; ----- smex-history -----
 (
+ uncomment-region
+ ansi-term
  cd
  5x5
  arp
  dbx
  dig
- erc
- ert
 )
 
 ;; ----- smex-data -----
 (
- 
+ (ansi-term . 1)
+ (uncomment-region . 1)
 )

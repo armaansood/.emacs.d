@@ -1,0 +1,41 @@
+;;; -*- coding: utf-8 -*-
+
+;; ----- ido-last-directory-list -----
+(
+ ("/home/armaan/git/CSE455/hw4/" . "src/")
+ ("/home/armaan/git/CSE455/" . "hw4/")
+ ("/home/armaan/git/" . "CSE455/")
+ ("/home/armaan/" . "git/")
+)
+
+;; ----- ido-work-directory-list -----
+(
+ "/home/armaan/.emacs.d/"
+ "/home/armaan/git/CSE455/hw4/"
+ "/home/armaan/git/CSE455/hw4/src/"
+)
+
+;; ----- ido-work-file-list -----
+(
+ ".gitignore"
+ "tryml.py"
+ "classifier.c"
+)
+
+;; ----- ido-dir-file-cache -----
+(
+ ("/home/armaan/git/CSE455/hw4/" (23549 58082 428641 500000) "uwimg.pyc" "uwimg.py" "uwimg" "tryml.py" "train/" "test/" "src/" "README.md" "obj/" "mnist_train.tar.gz" "mnist_test.tar.gz" "mnist.train" "mnist.test" "mnist.labels" "Makefile" "libuwimg.so" "libuwimg.a" "labels.txt" "data/" "cifar.train" "cifar.tgz" "cifar.test" "cifar.labels" "cifar/" ".gitignore" "../" "./")
+
+ ("/home/armaan/.emacs.d/" (23551 42283 922273 0) "smex-items" "saves/" "irony/" "init.el" "ido.last" "eshell/" "elpa/" "config.org~" "config.org" "config.el" "auto-save-list/" ".git/" "../" "./")
+
+ ("/home/armaan/git/CSE455/hw4/src/" (23549 57419 372634 100000) "test.h" "test.c" "stb_image_write.h" "stb_image.h" "matrix.h" "matrix.c" "main.c" "load_image.c" "list.h" "list.c" "image.h" "filter_image.c" "data.c" "classifier.c" "args.h" "args.c" "../" "./")
+
+ ("/home/armaan/git/CSE455/" (23547 17890 969741 400000) "README.md" "hw4/" "hw3/" "hw2/" "hw1/" "hw0/" ".git/" "../" "./")
+
+ ("/home/armaan/git/" (23547 17791 385929 600000) "CSE455/" "../" "./")
+
+ ("/home/armaan/" (23547 34874 636248 400000) "git/" ".sudo_as_admin_successful" ".ssh/" ".profile" ".gnupg/" ".gitconfig" ".emacs~" ".emacs.d/" ".cache/" ".bashrc" ".bash_logout" ".bash_history" ".bash_aliases~" ".bash_aliases" "../" "./")
+)
+
+;; ----- ido-unc-hosts-cache -----
+t
