@@ -24,6 +24,8 @@
 
 ;; ----- ido-dir-file-cache -----
 (
+ ("/homes/iws/armaan1/emacs27/bin/" (23560 21638 210684 29000) "etags" "emacs-27.0.50" "emacsclient" "ctags" "emacs" "ebrowse" "../" "./")
+
  ("/home/armaan/git/CSE455/hw4/" (23549 58082 428641 500000) "uwimg.pyc" "uwimg.py" "uwimg" "tryml.py" "train/" "test/" "src/" "README.md" "obj/" "mnist_train.tar.gz" "mnist_test.tar.gz" "mnist.train" "mnist.test" "mnist.labels" "Makefile" "libuwimg.so" "libuwimg.a" "labels.txt" "data/" "cifar.train" "cifar.tgz" "cifar.test" "cifar.labels" "cifar/" ".gitignore" "../" "./")
 
  ("/home/armaan/.emacs.d/" (23551 42283 922273 0) "smex-items" "saves/" "irony/" "init.el" "ido.last" "eshell/" "elpa/" "config.org~" "config.org" "config.el" "auto-save-list/" ".git/" "../" "./")

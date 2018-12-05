@@ -1,17 +1,18 @@
 
 ;; ----- smex-history -----
 (
+ emacs-version
  uncomment-region
  ansi-term
  cd
  5x5
  arp
  dbx
- dig
 )
 
 ;; ----- smex-data -----
 (
  (ansi-term . 1)
  (uncomment-region . 1)
+ (emacs-version . 1)
 )
