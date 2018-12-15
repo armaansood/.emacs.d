@@ -36,7 +36,13 @@
 
 ;; ----- ido-dir-file-cache -----
 (
+<<<<<<< HEAD
  ("/sshx:armaan1@attu.cs.washington.edu:/homes/iws/armaan1/git/cse455/hw5/" (ftp . 428882.7353323943) "./" "../" "~$Report.docx" "main.py" "plot_progress.py" "~WRL0724.tmp" "README.md" "models.py" "Report.docx" "models.pyc" "logs/" "pytorch_installation.txt" ".gitignore" "utils.pyc" "__pycache__/" "data/" "utils.py" "dataloader.py")
+=======
+ ("/homes/iws/armaan1/emacs27/bin/" (23560 21638 210684 29000) "etags" "emacs-27.0.50" "emacsclient" "ctags" "emacs" "ebrowse" "../" "./")
+
+ ("/home/armaan/git/CSE455/hw4/" (23549 58082 428641 500000) "uwimg.pyc" "uwimg.py" "uwimg" "tryml.py" "train/" "test/" "src/" "README.md" "obj/" "mnist_train.tar.gz" "mnist_test.tar.gz" "mnist.train" "mnist.test" "mnist.labels" "Makefile" "libuwimg.so" "libuwimg.a" "labels.txt" "data/" "cifar.train" "cifar.tgz" "cifar.test" "cifar.labels" "cifar/" ".gitignore" "../" "./")
+>>>>>>> 48c8d222fc68dab09db6c64a9b80012cf885e11f
 
  ("/home/armaan/git/CSE455/hw5/" (23559 11974 421665 500000) "~WRL0724.tmp" "~$Report.docx" "__pycache__/" "utils.pyc" "utils.py" "Report.docx" "README.md" "pytorch_installation.txt" "plot_progress.py" "models.pyc" "models.py" "main.py" "logs/" "dataloader.py" "data/" ".gitignore" ".#dataloader.py" "#dataloader.py#" "../" "./")
 

@@ -1,3 +1,4 @@
+(unless package--initialized (package-initialize t))
 
 (defvar my-term-shell "/bin/bash")
 (defadvice ansi-term (before force-bash)

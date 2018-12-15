@@ -1,19 +1,32 @@
 
 ;; ----- smex-history -----
 (
+<<<<<<< HEAD
  term
  list-packages
+=======
+ emacs-version
+ uncomment-region
+>>>>>>> 48c8d222fc68dab09db6c64a9b80012cf885e11f
  ansi-term
  uncomment-region
  cd
  5x5
  arp
+<<<<<<< HEAD
+=======
+ dbx
+>>>>>>> 48c8d222fc68dab09db6c64a9b80012cf885e11f
 )
 
 ;; ----- smex-data -----
 (
  (ansi-term . 3)
  (uncomment-region . 1)
+<<<<<<< HEAD
  (list-packages . 1)
  (term . 1)
+=======
+ (emacs-version . 1)
+>>>>>>> 48c8d222fc68dab09db6c64a9b80012cf885e11f
 )
