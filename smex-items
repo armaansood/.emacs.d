@@ -1,17 +1,19 @@
 
 ;; ----- smex-history -----
 (
- uncomment-region
+ term
+ list-packages
  ansi-term
+ uncomment-region
  cd
  5x5
  arp
- dbx
- dig
 )
 
 ;; ----- smex-data -----
 (
- (ansi-term . 1)
+ (ansi-term . 3)
  (uncomment-region . 1)
+ (list-packages . 1)
+ (term . 1)
 )
