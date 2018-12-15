@@ -1,3 +1,7 @@
 auto-save-list/*
 elpa/*
 saves/*
+backups
+auto-save-list
+elpa
+tramp
