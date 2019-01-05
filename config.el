@@ -1,4 +1,6 @@
-(unless package--initialized (package-initialize t))
+
+(line-number-mode 1)
+(column-number-mode 1)
 
 (defvar my-term-shell "/bin/bash")
 (defadvice ansi-term (before force-bash)
@@ -6,6 +8,8 @@
 (ad-activate 'ansi-term)
 
 (global-set-key (kbd "<C-return>") 'ansi-term)
+
+(global-subword-mode 1)
 
 (setq scroll-conservatively 100)
 
@@ -22,6 +26,22 @@
 (global-linum-mode)
 
 (defalias 'yes-or-no-p 'y-or-n-p)
+
+(add-to-list 'default-frame-alist '(height . 24))
+(add-to-list 'default-frame-alist '(width . 80))
+
+(use-package rainbow-mode
+  :ensure t
+  :init (rainbow-mode 1))
+
+(use-package rainbow-delimiters
+  :ensure t
+  :init
+  (rainbow-delimiters-mode 1))
+
+(use-package popup-kill-ring
+  :ensure t
+  :bind ("M-y" . popup-kill-ring))
 
 (use-package org-bullets
   :ensure t
@@ -104,3 +124,62 @@
   (interactive)
   (org-babel-load-file (expand-file-name "~/.emacs.d/config.org")))
 (global-set-key (kbd "C-c r") 'config-reload)
+
+(use-package switch-window
+  :ensure t
+  :config
+  (setq switch-window-input-style 'minibuffer)
+  (setq switch-window-increase 4)
+  (setq switch-window-threshold 2)
+  (setq switch-window-shortcut-style 'qwerty)
+  (setq switch-window-qwerty-shortcuts
+        '("a" "s" "d" "f" "j" "k" "l"))
+  :bind
+  ([remap other-window] . switch-window))
+
+(defun split-and-follow-horizontally ()
+  (interactive)
+  (split-window-below)
+  (balance-windows)
+  (other-window 1))
+(global-set-key (kbd "C-x 2") 'split-and-follow-horizontally)
+
+(defun split-and-follow-vertically ()
+  (interactive)
+  (split-window-right)
+  (balance-windows)
+  (other-window 1))
+(global-set-key (kbd "C-x 3") 'split-and-follow-vertically)
+
+(defun kill-whole-word ()
+  (interactive)
+  (backward-word)
+  (kill-word 1))
+(global-set-key (kbd "C-c w w") 'kill-whole-word)
+
+(defun copy-whole-line ()
+  (interactive)
+  (save-excursion
+    (kill-new
+     (buffer-substring
+      (point-at-bol)
+      (point-at-eol)))))
+(global-set-key (kbd "C-c w l") 'copy-whole-line)
+
+(use-package dashboard
+  :ensure t
+  :config
+  (dashboard-setup-startup-hook)
+  (setq dashboard-items '((recents . 10))))
+
+(use-package company
+  :ensure t
+  :init
+  (add-hook 'after-init-hook 'global-company-mode))
+
+(use-package spaceline
+  :ensure t
+  :config
+  (require 'spaceline-config)
+  (setq powerline-default-separator (quote arrow))
+  (spaceline-spacemacs-theme))
