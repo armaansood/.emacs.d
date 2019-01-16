@@ -110,6 +110,11 @@
 
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 
+(global-set-key (kbd "<C-up>") 'shrink-window)
+(global-set-key (kbd "<C-down>") 'enlarge-window)
+(global-set-key (kbd "<C-left>") 'shrink-window-horizontally)
+(global-set-key (kbd "<C-right>") 'enlarge-window-horizontally)
+
 (use-package avy
   :ensure t
   :bind
@@ -173,36 +178,45 @@
   (setq dashboard-items '((recents . 10))))
 
 (use-package company
-  :ensure t
-  :config
-  (setq company-idle-delay 0)
-  (setq company-minimum-prefix-length 3))
+    :ensure t
+    :config
+    (setq company-idle-delay 0)
+    (setq company-minimum-prefix-length 3)
+    (add-hook 'after-init-hook 'global-company-mode))
 
-(with-eval-after-load 'company
-  (define-key company-active-map (kbd "M-n") nil)
-  (define-key company-active-map (kbd "M-p") nil)
-  (define-key company-active-map (kbd "C-n") #'company-select-next)
-  (define-key company-active-map (kbd "C-p") #'company-select-previous)
-  (define-key company-active-map (kbd "SPC") #'company-abort))
+  (use-package company-c-headers
+    :ensure t)
 
-(use-package company-irony
-  :ensure t
-  :config
-  (require 'company)
-  (add-to-list 'company-backends 'company-irony))
+(eval-after-load 'company '(add-to-list 'company-backends '(company-c-headers company-irony)))
 
-(use-package irony
-  :ensure t
-  :config
-  (add-hook 'c++-mode-hook 'irony-mode)
-  (add-hook 'c-mode-hook 'irony-mode)
-  (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
+  (with-eval-after-load 'company
+    (define-key company-active-map (kbd "M-n") nil)
+    (define-key company-active-map (kbd "M-p") nil)
+    (define-key company-active-map (kbd "C-n") #'company-select-next)
+    (define-key company-active-map (kbd "C-p") #'company-select-previous)
+    (define-key company-active-map (kbd "C-g") #'company-abort))
 
-(with-eval-after-load 'company
-  (add-hook 'c++-mode-hook 'company-mode)
-  (add-hook 'c-mode-hook 'company-mode)
-  (add-hook 'python-mode 'company-mode)
-  (add-hook 'emacs-lisp-mode 'company-mode))
+  (use-package company-irony
+    :ensure t
+    :config
+    (require 'company)
+    (add-to-list 'company-backends 'company-irony))
+
+  (use-package irony
+    :ensure t
+    :config
+    (add-hook 'c++-mode-hook 'irony-mode)
+    (add-hook 'c-mode-hook 'irony-mode)
+    (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
+
+  (with-eval-after-load 'company
+    (add-hook 'c++-mode-hook 'company-mode)
+    (add-hook 'c-mode-hook 'company-mode)
+    (add-hook 'python-mode 'company-mode)
+    (add-hook 'emacs-lisp-mode 'company-mode))
+
+
+  (add-to-list 'company-backends 'company-c-headers)
 
 (defvar myPackages
   '(better-defaults
@@ -230,6 +244,50 @@
 (require 'py-autopep8)
 (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
 
+(use-package flycheck
+  :ensure t
+  :config
+  (progn
+    (global-flycheck-mode)))
+
+(use-package irony
+  :ensure t
+  :config
+  (progn
+    ;; If irony server was never installed, install it.
+    (unless (irony--find-server-executable) (call-interactively #'irony-install-server))
+
+    (add-hook 'c++-mode-hook 'irony-mode)
+    (add-hook 'c-mode-hook 'irony-mode)
+
+    ;; Use compilation database first, clang_complete as fallback.
+    (setq-default irony-cdb-compilation-databases '(irony-cdb-libclang
+                                                    irony-cdb-clang-complete))
+
+    (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
+    ))
+
+;; I use irony with company to get code completion.
+(use-package company-irony
+  :ensure t
+  :config
+  (progn
+    (eval-after-load 'company '(add-to-list 'company-backends 'company-irony))))
+
+;; I use irony with flycheck to get real-time syntax checking.
+(use-package flycheck-irony
+  :ensure t
+  :config
+  (progn
+    (eval-after-load 'flycheck '(add-hook 'flycheck-mode-hook #'flycheck-irony-setup))))
+
+;; Eldoc shows argument list of the function you are currently writing in the echo area.
+(use-package irony-eldoc
+  :ensure t
+  :config
+  (progn
+    (add-hook 'irony-mode-hook #'irony-eldoc)))
+
 (use-package spaceline
   :ensure t
   :config
@@ -243,3 +301,99 @@
 
 (use-package iedit
   :ensure t)
+
+(use-package treemacs
+  :ensure t
+  :defer t
+  :init
+  (with-eval-after-load 'winum
+    (define-key winum-keymap (kbd "M-0") #'treemacs-select-window))
+  :config
+  (progn
+    (setq treemacs-collapse-dirs              (if (executable-find "python") 3 0)
+          treemacs-deferred-git-apply-delay   0.5
+          treemacs-display-in-side-window     t
+          treemacs-file-event-delay           5000
+          treemacs-file-follow-delay          0.2
+          treemacs-follow-after-init          t
+          treemacs-follow-recenter-distance   0.1
+          treemacs-git-command-pipe           ""
+          treemacs-goto-tag-strategy          'refetch-index
+          treemacs-indentation                2
+          treemacs-indentation-string         " "
+          treemacs-is-never-other-window      nil
+          treemacs-max-git-entries            5000
+          treemacs-no-png-images              nil
+          treemacs-no-delete-other-windows    t
+          treemacs-project-follow-cleanup     nil
+          treemacs-persist-file               (expand-file-name ".cache/treemacs-persist" user-emacs-directory)
+          treemacs-recenter-after-file-follow nil
+          treemacs-recenter-after-tag-follow  nil
+          treemacs-show-cursor                nil
+          treemacs-show-hidden-files          t
+          treemacs-silent-filewatch           nil
+          treemacs-silent-refresh             nil
+          treemacs-sorting                    'alphabetic-desc
+          treemacs-space-between-root-nodes   t
+          treemacs-tag-follow-cleanup         t
+          treemacs-tag-follow-delay           1.5
+          treemacs-width                      35)
+
+    ;; The default width and height of the icons is 22 pixels. If you are
+    ;; using a Hi-DPI display, uncomment this to double the icon size.
+    ;;(treemacs-resize-icons 44)
+
+    (treemacs-follow-mode t)
+    (treemacs-filewatch-mode t)
+    (treemacs-fringe-indicator-mode t)
+    (pcase (cons (not (null (executable-find "git")))
+                 (not (null (executable-find "python3"))))
+      (`(t . t)
+       (treemacs-git-mode 'deferred))
+      (`(t . _)
+       (treemacs-git-mode 'simple))))
+  :bind
+  (:map global-map
+        ("M-0"       . treemacs-select-window)
+        ("C-x t 1"   . treemacs-delete-other-windows)
+        ("C-x t t"   . treemacs)
+        ("C-x t B"   . treemacs-bookmark)
+        ("C-x t C-t" . treemacs-find-file)
+        ("C-x t M-t" . treemacs-find-tag)))
+
+(use-package flymake-google-cpplint
+  :ensure t)
+
+(use-package google-c-style
+  :ensure t)
+
+(use-package flymake-cursor
+  :ensure t)
+
+(require 'google-c-style)
+(add-hook 'c-mode-common-hook 'google-set-c-style)
+(add-hook 'c-mode-common-hook 'google-make-newline-indent)
+
+(defun my:flymake-google-init ()
+  (require 'flymake-google-cpplint)
+  (custom-set-variables
+   '(flymake-google-cpplint-command "cpplint"))
+  (flymake-google-cpplint-load))
+
+(add-hook 'c-mode-hook 'my:flymake-google-init)
+(add-hook 'c++-mode-hook 'my:flymake-google-init)
+
+(use-package color-theme
+  :ensure t)
+(use-package moe-theme
+  :ensure t)
+(moe-light)
+
+(use-package ggtags
+  :ensure t
+  :config 
+  (add-hook 'c-mode-common-hook
+            (lambda ()
+              (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
+                (ggtags-mode 1))))
+  )
