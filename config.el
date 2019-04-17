@@ -62,35 +62,6 @@
   :init
   (which-key-mode))
 
-(use-package company
-             :ensure t
-             :config
-             (setq company-idle-delay 0)
-             (setq company-minimum-prefix-length 2))
-
-(with-eval-after-load 'company
-  (define-key company-active-map (kbd "M-n") nil)
-  (define-key company-active-map (kbd "M-p") nil)
-  (define-key company-active-map (kbd "C-n") #'company-select-next)
-  (define-key company-active-map (kbd "C-p") #'company-select-previous))
-
-(use-package company-irony
-  :ensure t
-  :config
-  (require 'company)
-  (add-to-list 'company-backends 'company-irony))
-
-(use-package irony
-  :ensure t
-  :config
-  (add-hook 'c++-mode-hook 'irony-mode)
-  (add-hook 'c-mode-hook 'irony-mode)
-  (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
-
-(with-eval-after-load 'company
-  (add-hook 'c++-mode-hook 'company-mode)
-  (add-hook 'c-mode-hook 'company-mode))
-
 (setq ido-enable-flex-matching nil)
 (setq ido-create-new-buff 'always)
 (setq ido-everywhere t)
@@ -217,17 +188,16 @@
   (with-eval-after-load 'company
     (add-hook 'c++-mode-hook 'company-mode)
     (add-hook 'c-mode-hook 'company-mode)
-;;    (add-hook 'python-mode 'company-mode)
     (add-hook 'emacs-lisp-mode 'company-mode))
-
 
   (add-to-list 'company-backends 'company-c-headers)
 
 (use-package flycheck
   :ensure t
-  :config
-  (progn
-    (global-flycheck-mode)))
+  )
+
+(add-hook 'c++-mode-hook 'flycheck-mode)
+(add-hook 'c-mode-hook 'flycheck-mode)
 
 (use-package irony
   :ensure t
@@ -267,12 +237,12 @@
   (progn
     (add-hook 'irony-mode-hook #'irony-eldoc)))
 
-;; (use-package spaceline
-;;   :ensure t
-;;   :config
-;;   (require 'spaceline-config)
-;;   (setq powerline-default-separator (quote arrow))
-;;   (spaceline-spacemacs-theme))
+(use-package spaceline
+  :ensure t
+  :config
+  (require 'spaceline-config)
+  (setq powerline-default-separator (quote arrow))
+  (spaceline-spacemacs-theme))
 
 (use-package swiper
   :ensure t
@@ -280,65 +250,6 @@
 
 (use-package iedit
   :ensure t)
-
-(use-package treemacs
-  :ensure t
-  :defer t
-  :init
-  (with-eval-after-load 'winum
-    (define-key winum-keymap (kbd "M-0") #'treemacs-select-window))
-  :config
-  (progn
-    (setq treemacs-collapse-dirs              (if (executable-find "python") 3 0)
-          treemacs-deferred-git-apply-delay   0.5
-          treemacs-display-in-side-window     t
-          treemacs-file-event-delay           5000
-          treemacs-file-follow-delay          0.2
-          treemacs-follow-after-init          t
-          treemacs-follow-recenter-distance   0.1
-          treemacs-git-command-pipe           ""
-          treemacs-goto-tag-strategy          'refetch-index
-          treemacs-indentation                2
-          treemacs-indentation-string         " "
-          treemacs-is-never-other-window      nil
-          treemacs-max-git-entries            5000
-          treemacs-no-png-images              nil
-          treemacs-no-delete-other-windows    t
-          treemacs-project-follow-cleanup     nil
-          treemacs-persist-file               (expand-file-name ".cache/treemacs-persist" user-emacs-directory)
-          treemacs-recenter-after-file-follow nil
-          treemacs-recenter-after-tag-follow  nil
-          treemacs-show-cursor                nil
-          treemacs-show-hidden-files          t
-          treemacs-silent-filewatch           nil
-          treemacs-silent-refresh             nil
-          treemacs-sorting                    'alphabetic-desc
-          treemacs-space-between-root-nodes   t
-          treemacs-tag-follow-cleanup         t
-          treemacs-tag-follow-delay           1.5
-          treemacs-width                      35)
-
-    ;; The default width and height of the icons is 22 pixels. If you are
-    ;; using a Hi-DPI display, uncomment this to double the icon size.
-    ;;(treemacs-resize-icons 44)
-
-    (treemacs-follow-mode t)
-    (treemacs-filewatch-mode t)
-    (treemacs-fringe-indicator-mode t)
-    (pcase (cons (not (null (executable-find "git")))
-                 (not (null (executable-find "python3"))))
-      (`(t . t)
-       (treemacs-git-mode 'deferred))
-      (`(t . _)
-       (treemacs-git-mode 'simple))))
-  :bind
-  (:map global-map
-        ("M-0"       . treemacs-select-window)
-        ("C-x t 1"   . treemacs-delete-other-windows)
-        ("C-x t t"   . treemacs)
-        ("C-x t B"   . treemacs-bookmark)
-        ("C-x t C-t" . treemacs-find-file)
-        ("C-x t M-t" . treemacs-find-tag)))
 
 (use-package flymake-google-cpplint
   :ensure t)
@@ -362,11 +273,11 @@
 (add-hook 'c-mode-hook 'my:flymake-google-init)
 (add-hook 'c++-mode-hook 'my:flymake-google-init)
 
-(use-package color-theme
-  :ensure t)
-(use-package moe-theme
-  :ensure t)
-(moe-light)
+;; (use-package color-theme
+;;   :ensure t)
+;; (use-package moe-theme
+;;   :ensure t)
+;; (moe-light)
 
 (use-package ggtags
   :ensure t
@@ -377,182 +288,170 @@
                 (ggtags-mode 1))))
   )
 
-
-
 (add-hook 'c-mode-hook
           (lambda () (setq flycheck-clang-include-path
                            (list (expand-file-name "~/git/xk/inc/")))))
 
-(use-package markdown-mode
-    :ensure t
-    :commands (markdown-mode gfm-mode)
-    :mode (("README\\.md\\'" . gfm-mode)
-           ("\\.md\\'" . markdown-mode)
-           ("\\.markdown\\'" . markdown-mode))
-    :init (setq markdown-command "multimarkdown"))
-(custom-set-variables
- '(markdown-command "/usr/bin/pandoc"))
+;;   (defvar myPackages
+;;     '(better-defaults
+;;       ein
+;;       elpy
+;;       flycheck
+;;       material-theme
+;;       py-autopep8))
 
-(defvar myPackages
-    '(better-defaults
-      ein
-      elpy
-      flycheck
-      material-theme
-      py-autopep8))
+;;   (mapc #'(lambda (package)
+;;             (unless (package-installed-p package)
+;;               (package-install package)))
+;;         myPackages)
+;;   (elpy-enable)
+;;   (setenv "IPY_TEST_SIMPLE_PROMPT" "1")
+;;   (setq python-shell-interpreter "ipython3"
+;;         python-shell-interpreter-args "-i")
 
-  (mapc #'(lambda (package)
-            (unless (package-installed-p package)
-              (package-install package)))
-        myPackages)
-  (elpy-enable)
-  (setenv "IPY_TEST_SIMPLE_PROMPT" "1")
-  (setq python-shell-interpreter "ipython3"
-        python-shell-interpreter-args "-i")
+;;   ;; use flycheck not flymake with elpy
+;;   (when (require 'flycheck nil t)
+;;     (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
+;;     (add-hook 'elpy-mode-hook 'flycheck-mode))
 
-  ;; use flycheck not flymake with elpy
-  (when (require 'flycheck nil t)
-    (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
-    (add-hook 'elpy-mode-hook 'flycheck-mode))
+;;   ;; enable autopep8 formatting on save
+;;   (require 'py-autopep8)
+;;   (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
+;;   ;; (use-package elpy
+;;   ;;   :ensure t
+;;   ;;   :init
+;;   ;;   )
+;;   ;; (elpy-enable)
+;; ;;(require 'flycheck-color-mode-line)
+;;  ;;  (defun company-jedi-setup ()
+;;  ;;    (add-to-list 'company-backends 'company-jedi))
+;;  ;;  (add-hook 'python-mode-hook 'company-jedi-setup)
+;;  ;;  (setq jedi:setup-keys t)
+;;  ;;  (setq jedi:complete-on-dot t)
+;;  ;;  (add-hook 'python-mode-hook 'jedi:setup)
+;;  ;;  (setq
+;;  ;;   python-shell-interpreter "ipython"
+;;  ;;   python-shell-interpreter-args "-i")
+;;  ;;  (add-hook 'after-init-hook 'global-flycheck-mode)
+;;  ;;  (setq flycheck-display-errors-function #'flycheck-display-error-messages-unless-error-list)
 
-  ;; enable autopep8 formatting on save
-  (require 'py-autopep8)
-  (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
-  ;; (use-package elpy
-  ;;   :ensure t
-  ;;   :init
-  ;;   )
-  ;; (elpy-enable)
-;;(require 'flycheck-color-mode-line)
- ;;  (defun company-jedi-setup ()
- ;;    (add-to-list 'company-backends 'company-jedi))
- ;;  (add-hook 'python-mode-hook 'company-jedi-setup)
- ;;  (setq jedi:setup-keys t)
- ;;  (setq jedi:complete-on-dot t)
- ;;  (add-hook 'python-mode-hook 'jedi:setup)
- ;;  (setq
- ;;   python-shell-interpreter "ipython"
- ;;   python-shell-interpreter-args "-i")
- ;;  (add-hook 'after-init-hook 'global-flycheck-mode)
- ;;  (setq flycheck-display-errors-function #'flycheck-display-error-messages-unless-error-list)
+;;  ;; ;; (add-hook 'flycheck-mode-hook 'flycheck-color-mode-line-mode)
+;;  ;;  (require 'py-autopep8)
+;; ;;  (add-hook 'python-mode-hook 'py-autopep8-enable-on-save)
+;; ;; define list of packages to install
+;; ;; (defvar myPackages
+;; ;;   '(better-defaults
+;; ;; ;    material-theme
+;; ;;     exec-path-from-shell
+;; ;;     elpy
+;; ;;     pyenv-mode))
 
- ;; ;; (add-hook 'flycheck-mode-hook 'flycheck-color-mode-line-mode)
- ;;  (require 'py-autopep8)
-;;  (add-hook 'python-mode-hook 'py-autopep8-enable-on-save)
-;; define list of packages to install
-;; (defvar myPackages
-;;   '(better-defaults
-;; ;    material-theme
-;;     exec-path-from-shell
-;;     elpy
-;;     pyenv-mode))
+;; ;; ;; install all packages in list
+;; ;; (mapc #'(lambda (package)
+;; ;;     (unless (package-installed-p package)
+;; ;;       (package-install package)))
+;; ;;       myPackages)
 
-;; ;; install all packages in list
-;; (mapc #'(lambda (package)
-;;     (unless (package-installed-p package)
-;;       (package-install package)))
-;;       myPackages)
+;; ;; ;; Use shell's $PATH
+;; ;; (exec-path-from-shell-copy-env "PATH")
+;; ;; (setq inhibit-startup-message t)   ;; hide the startup message
+;; ;; ;;(load-theme 'material t)           ;; load material theme
+;; ;; (global-linum-mode t)              ;; enable line numbers globally
+;; ;; (setq linum-format "%4d \u2502 ")  ;; format line number spacing
 
-;; ;; Use shell's $PATH
-;; (exec-path-from-shell-copy-env "PATH")
-;; (setq inhibit-startup-message t)   ;; hide the startup message
-;; ;;(load-theme 'material t)           ;; load material theme
-;; (global-linum-mode t)              ;; enable line numbers globally
-;; (setq linum-format "%4d \u2502 ")  ;; format line number spacing
-
-;; (elpy-enable)
-;; (pyenv-mode)
-;; (setq python-shell-interpreter "ipython"
+;; ;; (elpy-enable)
+;; ;; (pyenv-mode)
+;; ;; (setq python-shell-interpreter "ipython"
+;; ;;       python-shell-interpreter-args "-i --simple-prompt")
+;; ;; (setq python-shell-interpreter "jupyter"
+;; ;;       python-shell-interpreter-args "console --simple-prompt"
+;; ;;       python-shell-prompt-detect-failure-warning nil)
+;; ;; (add-to-list 'python-shell-completion-native-disabled-interpreters "jupyter")
+;; (setq python-shell-interpreter "ipython3"
 ;;       python-shell-interpreter-args "-i --simple-prompt")
-;; (setq python-shell-interpreter "jupyter"
-;;       python-shell-interpreter-args "console --simple-prompt"
-;;       python-shell-prompt-detect-failure-warning nil)
-;; (add-to-list 'python-shell-completion-native-disabled-interpreters "jupyter")
-(setq python-shell-interpreter "ipython3"
-      python-shell-interpreter-args "-i --simple-prompt")
 
-(use-package go-mode
-    :ensure t
-    )
-  (use-package go-eldoc
-    :ensure t
-    )
-  (use-package go-autocomplete
-    :ensure t
-    )
+;;   (use-package go-mode
+;;     :ensure t
+;;     )
+;;   (use-package go-eldoc
+;;     :ensure t
+;;     )
+;;   (use-package go-autocomplete
+;;     :ensure t
+;;     )
 
-  (use-package company-go
-    :ensure t
-    )
-  (use-package exec-path-from-shell
-    :ensure t
-    )
+;;   (use-package company-go
+;;     :ensure t
+;;     )
+;;   (use-package exec-path-from-shell
+;;     :ensure t
+;;     )
 
-  (require 'go-mode)
-  ;; (add-hook 'before-save-hook 'gofmt-before-save)
+;;   (require 'go-mode)
+;;   ;; (add-hook 'before-save-hook 'gofmt-before-save)
 
-  ;; (add-hook 'go-mode-hook '(lambda ()
-  ;;   (local-set-key (kbd "C-c C-r") 'go-remove-unused-imports)))
+;;   ;; (add-hook 'go-mode-hook '(lambda ()
+;;   ;;   (local-set-key (kbd "C-c C-r") 'go-remove-unused-imports)))
 
-  ;; (add-hook 'go-mode-hook '(lambda ()
-  ;;   (local-set-key (kbd "C-c C-g") 'go-goto-imports)))
+;;   ;; (add-hook 'go-mode-hook '(lambda ()
+;;   ;;   (local-set-key (kbd "C-c C-g") 'go-goto-imports)))
 
-  ;; (add-hook 'go-mode-hook '(lambda ()
-  ;;   (local-set-key (kbd "C-c C-k") 'godoc)))
+;;   ;; (add-hook 'go-mode-hook '(lambda ()
+;;   ;;   (local-set-key (kbd "C-c C-k") 'godoc)))
 
 
 
 
-  ;; (setq gofmt-command "goimports")
-  ;; (add-hook 'before-save-hook 'gofmt-before-save)
+;;   ;; (setq gofmt-command "goimports")
+;;   ;; (add-hook 'before-save-hook 'gofmt-before-save)
 
-  ;; (add-hook 'go-mode-hook 'company-mode)
-  ;; (add-hook 'go-mode-hook (lambda ()
-  ;;   (set (make-local-variable 'company-backends) '(company-go))
-  ;;   (company-mode)))
+;;   ;; (add-hook 'go-mode-hook 'company-mode)
+;;   ;; (add-hook 'go-mode-hook (lambda ()
+;;   ;;   (set (make-local-variable 'company-backends) '(company-go))
+;;   ;;   (company-mode)))
 
-  ;; (add-to-list 'load-path "$GOPATH/src/github.com/dougm/goflymake")
-  ;; (require 'go-flymake')
+;;   ;; (add-to-list 'load-path "$GOPATH/src/github.com/dougm/goflymake")
+;;   ;; (require 'go-flymake')
 
-  ;; (add-hook 'go-mode-hook 'go-eldoc-setup)
-  ;; (add-hook 'go-mode-hook 'company-mode)
+;;   ;; (add-hook 'go-mode-hook 'go-eldoc-setup)
+;;   ;; (add-hook 'go-mode-hook 'company-mode)
 
-  (defun set-exec-path-from-shell-PATH ()
-    (let ((path-from-shell (replace-regexp-in-string
-                            "[ \t\n]*$"
-                            ""
-                            (shell-command-to-string "$SHELL --login -i -c 'echo $PATH'"))))
-      (setenv "PATH" path-from-shell)
-      (setq eshell-path-env path-from-shell) ; for eshell users
-      (setq exec-path (split-string path-from-shell path-separator))))
+;;   (defun set-exec-path-from-shell-PATH ()
+;;     (let ((path-from-shell (replace-regexp-in-string
+;;                             "[ \t\n]*$"
+;;                             ""
+;;                             (shell-command-to-string "$SHELL --login -i -c 'echo $PATH'"))))
+;;       (setenv "PATH" path-from-shell)
+;;       (setq eshell-path-env path-from-shell) ; for eshell users
+;;       (setq exec-path (split-string path-from-shell path-separator))))
 
-  (when window-system (set-exec-path-from-shell-PATH))
+;;   (when window-system (set-exec-path-from-shell-PATH))
 
 
-  (setenv "GOPATH" "/home/armaan/go")
-  (add-to-list 'exec-path "/home/armaan/go/bin")
-  (add-hook 'before-save-hook 'gofmt-before-save)
-  (defun my-go-mode-hook ()
-    (setq gofmt-command "goimports")
-    ; Call Gofmt before saving                                                    
-    (add-hook 'before-save-hook 'gofmt-before-save)
-    ; Godef jump key binding                                                      
-    (local-set-key (kbd "M-.") 'godef-jump)
-    (local-set-key (kbd "M-*") 'pop-tag-mark)
-(add-hook 'before-save-hook 'gofmt-before-save)
-            (setq tab-width 4)
-            (setq indent-tabs-mode 1)
-    )
-  (add-hook 'go-mode-hook 'my-go-mode-hook)
+;;   (setenv "GOPATH" "/home/armaan/go")
+;;   (add-to-list 'exec-path "/home/armaan/go/bin")
+;;   (add-hook 'before-save-hook 'gofmt-before-save)
+;;   (defun my-go-mode-hook ()
+;;     (setq gofmt-command "goimports")
+;;     ; Call Gofmt before saving                                                    
+;;     (add-hook 'before-save-hook 'gofmt-before-save)
+;;     ; Godef jump key binding                                                      
+;;     (local-set-key (kbd "M-.") 'godef-jump)
+;;     (local-set-key (kbd "M-*") 'pop-tag-mark)
+;; (add-hook 'before-save-hook 'gofmt-before-save)
+;;             (setq tab-width 4)
+;;             (setq indent-tabs-mode 1)
+;;     )
+;;   (add-hook 'go-mode-hook 'my-go-mode-hook)
 
-  (defun auto-complete-for-go ()
-  (auto-complete-mode 1))
-  (add-hook 'go-mode-hook 'auto-complete-for-go)
-  (with-eval-after-load 'go-mode
-    (require 'go-autocomplete))
+;;   (defun auto-complete-for-go ()
+;;   (auto-complete-mode 1))
+;;   (add-hook 'go-mode-hook 'auto-complete-for-go)
+;;   (with-eval-after-load 'go-mode
+;;     (require 'go-autocomplete))
 
-  (add-hook 'go-mode-hook '(lambda ()
-                             (local-set-key (kbd "C-c C-r") 'go-remove-unused-imports)))
+;;   (add-hook 'go-mode-hook '(lambda ()
+;;                              (local-set-key (kbd "C-c C-r") 'go-remove-unused-imports)))
 
-  (add-hook 'go-mode-hook '(lambda ()
-    (local-set-key (kbd "C-c C-k") 'godoc)))
+;;   (add-hook 'go-mode-hook '(lambda ()
+;;     (local-set-key (kbd "C-c C-k") 'godoc)))
