@@ -45,6 +45,8 @@
 
 (show-paren-mode 1)
 
+(tool-bar-mode -1)
+
 (use-package org-bullets
   :ensure t
   :config
@@ -371,27 +373,25 @@
 ;;       python-shell-interpreter-args "-i --simple-prompt")
 
 (use-package go-mode
-  :ensure t
-  :config
-  (add-hook 'before-save-hook #'gofmt-before-save)
-  (add-hook 'go-mode-hook 'flycheck-mode)
-  (add-hook 'go-mode-hook 'dumb-jump-mode)
-  (setq go-packages-function 'go-packages-go-list))
+    :ensure t
+    :config
+    (add-hook 'before-save-hook #'gofmt-before-save)
+    (add-hook 'go-mode-hook 'flycheck-mode)
+    (add-hook 'go-mode-hook 'dumb-jump-mode)
+    (setq go-packages-function 'go-packages-go-list))
 
-;; (use-package company-go
-;;   :ensure t
-;;   :config
-;;   (add-hook 'go-mode-hook 'company-mode)
-;;   (add-to-list 'company-backends 'company-go))
+  ;; (use-package company-go
+  ;;   :ensure t
+  ;;   :config
+  ;;   (add-hook 'go-mode-hook 'company-mode)
+  ;;   (add-to-list 'company-backends 'company-go))
 
-(use-package go-eldoc
-  :diminish eldoc-mode
-  :config (add-hook 'go-mode-hook 'go-eldoc-setup))
+  (use-package go-eldoc
+    :diminish eldoc-mode
+    :config (add-hook 'go-mode-hook 'go-eldoc-setup))
 
 
-  ;;   (use-package go-mode
-  ;;     :ensure t
-  ;;     )
+     
   ;;   (use-package go-eldoc
   ;;     :ensure t
   ;;     )
@@ -402,55 +402,55 @@
   ;;   (use-package company-go
   ;;     :ensure t
   ;;     )
-     (use-package exec-path-from-shell
-       :ensure t
-       )
+  (use-package exec-path-from-shell
+    :ensure t
+    )
 
   ;;   (require 'go-mode)
   ;;   ;; (add-hook 'before-save-hook 'gofmt-before-save)
 
- (add-hook 'go-mode-hook '(lambda ()
-   (local-set-key (kbd "C-c C-r") 'go-remove-unused-imports)))
+  (add-hook 'go-mode-hook '(lambda ()
+                             (local-set-key (kbd "C-c C-r") 'go-remove-unused-imports)))
 
   ;;   ;; (add-hook 'go-mode-hook '(lambda ()
   ;;   ;;   (local-set-key (kbd "C-c C-g") 'go-goto-imports)))
 
-   (add-hook 'go-mode-hook '(lambda ()
-     (local-set-key (kbd "C-c C-k") 'godoc)))
+  (add-hook 'go-mode-hook '(lambda ()
+                             (local-set-key (kbd "C-c C-k") 'godoc)))
 
 
 
 
-  ;;   ;; (setq gofmt-command "goimports")
-  ;;   ;; (add-hook 'before-save-hook 'gofmt-before-save)
+  (setq gofmt-command "goimports")
+  (add-hook 'before-save-hook 'gofmt-before-save)
 
   ;;   ;; (add-hook 'go-mode-hook 'company-mode)
   ;;   ;; (add-hook 'go-mode-hook (lambda ()
   ;;   ;;   (set (make-local-variable 'company-backends) '(company-go))
   ;;   ;;   (company-mode)))
 
-  ;;   ;; (add-to-list 'load-path "$GOPATH/src/github.com/dougm/goflymake")
-  ;;   ;; (require 'go-flymake')
+  ;(add-to-list 'load-path "$GOPATH/src/github.com/dougm/goflymake")
+  ;(require 'go-flymake)
 
   ;;   ;; (add-hook 'go-mode-hook 'go-eldoc-setup)
   ;;   ;; (add-hook 'go-mode-hook 'company-mode)
 
-    (defun set-exec-path-from-shell-PATH ()
-      (let ((path-from-shell (replace-regexp-in-string
-                              "[ \t\n]*$"
-                              ""
-                              (shell-command-to-string "$SHELL --login -i -c 'echo $PATH'"))))
-        (setenv "PATH" path-from-shell)
-        (setq eshell-path-env path-from-shell) ; for eshell users
-        (setq exec-path (split-string path-from-shell path-separator))))
+  (defun set-exec-path-from-shell-PATH ()
+    (let ((path-from-shell (replace-regexp-in-string
+                            "[ \t\n]*$"
+                            ""
+                            (shell-command-to-string "$SHELL --login -i -c 'echo $PATH'"))))
+      (setenv "PATH" path-from-shell)
+      (setq eshell-path-env path-from-shell) ; for eshell users
+      (setq exec-path (split-string path-from-shell path-separator))))
 
-     (when window-system (set-exec-path-from-shell-PATH))
+  (when window-system (set-exec-path-from-shell-PATH))
 
 
-     (setenv "GOPATH" "/home/armaan/go")
-     (add-to-list 'exec-path "/home/armaan/go/bin")
-  ;;   (add-hook 'before-save-hook 'gofmt-before-save)
-  ;;   (defun my-go-mode-hook ()
+  (setenv "GOPATH" "/home/armaan/go")
+  (add-to-list 'exec-path "/home/armaan/go/bin")
+  (add-hook 'before-save-hook 'gofmt-before-save)
+  ;;       (defun my-go-mode-hook ()
   ;;     (setq gofmt-command "goimports")
   ;;     ; Call Gofmt before saving                                                    
   ;;     (add-hook 'before-save-hook 'gofmt-before-save)
@@ -458,16 +458,17 @@
   ;;     (local-set-key (kbd "M-.") 'godef-jump)
   ;;     (local-set-key (kbd "M-*") 'pop-tag-mark)
   ;; (add-hook 'before-save-hook 'gofmt-before-save)
-  ;;             (setq tab-width 4)
-  ;;             (setq indent-tabs-mode 1)
+  (setq tab-width 4)
+(setq-default tab-width 4)
+  (setq indent-tabs-mode 1)
   ;;     )
   ;;   (add-hook 'go-mode-hook 'my-go-mode-hook)
 
-    (defun auto-complete-for-go ()
+  (defun auto-complete-for-go ()
     (auto-complete-mode 1))
-    (add-hook 'go-mode-hook 'auto-complete-for-go)
-    (with-eval-after-load 'go-mode
-      (require 'go-autocomplete))
+  (add-hook 'go-mode-hook 'auto-complete-for-go)
+  (with-eval-after-load 'go-mode
+    (require 'go-autocomplete))
 
   ;;   (add-hook 'go-mode-hook '(lambda ()
   ;;                              (local-set-key (kbd "C-c C-r") 'go-remove-unused-imports)))
