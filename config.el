@@ -376,8 +376,8 @@
     :ensure t
     :config
     (add-hook 'before-save-hook #'gofmt-before-save)
-    (add-hook 'go-mode-hook 'flycheck-mode)
-    (add-hook 'go-mode-hook 'dumb-jump-mode)
+ ;   (add-hook 'go-mode-hook 'flycheck-mode)
+;    (add-hook 'go-mode-hook 'dumb-jump-mode)
     (setq go-packages-function 'go-packages-go-list))
 
   ;; (use-package company-go
@@ -429,8 +429,9 @@
   ;;   ;;   (set (make-local-variable 'company-backends) '(company-go))
   ;;   ;;   (company-mode)))
 
-  ;(add-to-list 'load-path "$GOPATH/src/github.com/dougm/goflymake")
-  ;(require 'go-flymake)
+(add-to-list 'load-path "~/go/src/github.com/dougm/goflymake")
+(require 'go-flymake)
+(require 'go-flycheck)
 
   ;;   ;; (add-hook 'go-mode-hook 'go-eldoc-setup)
   ;;   ;; (add-hook 'go-mode-hook 'company-mode)
